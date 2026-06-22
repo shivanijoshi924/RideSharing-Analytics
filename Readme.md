@@ -14,8 +14,8 @@ The primary objective of the project is to understand how optimized algorithms c
 
 ## Team Members
 
-* Yash Agarwal
 * Shivani
+* Yash Agarwal
 * Nitya
 * Pooja
 
