@@ -1,9 +1,10 @@
 #include "../Trip.h"
 #include "../RideAnalytics.h"
-#include<algorithm>
-#include<vector>
-#include<numeric>
-#include<iostream>
+#include <vector>
+#include <numeric>
+#include <iostream>
+
+using namespace std;
 
 /*
 1. Total Revenue
@@ -11,22 +12,28 @@
 3. Sliding Window
 4. Kadane's Algorithm
 */
- 
+
+// Total Revenue
 void calculateTotalRevenue(RideAnalytics &analytics)
 {
-    vector<Trip> trips = analytics.getTrips();
+    vector<Trip> &trips = analytics.getTrips();
 
-    double totalRevenue=0;
-    for(auto &trip : analytics.getTrips())
+    double totalRevenue = 0;
+
+    for(auto &trip : trips)
     {
         if(!trip.cancelled)
         {
-            totalRevenue + = trip.fare;
+            totalRevenue += trip.fare;
         }
     }
-    cout<<"Total Revenue: "<<totalRevenue<<endl;
+
+    cout << "\n----- Total Revenue -----" << endl;
+    cout << "Total Revenue : Rs. " << totalRevenue << endl;
 }
 
+
+// Prefix Sum
 void revenueRangeQuery(RideAnalytics &analytics)
 {
     vector<Trip> &trips = analytics.getTrips();
@@ -70,41 +77,73 @@ void revenueRangeQuery(RideAnalytics &analytics)
 }
     
 
+
+// Sliding Window
 void averageRevenue(RideAnalytics &analytics)
 {
-    vector<Trip> trips = analytics.getTrips();
+    vector<Trip> &trips = analytics.getTrips();
+
+    if(trips.empty())
+    {
+        cout << "No Trips Available!" << endl;
+        return;
+    }
 
     int k;
-    cout<<"Enter window size: "<<endl;
-    cin>>k;
-    if(k>0 && k<= trips.size()){
-        double sum=0;
-       
-        for(int i=0;i<k;i++){
-            sum+=trips[i].fare;
-        }
-        double maxAverage=sum/k;
-        int start=0;
-        for(int i=k;i<trip.size();i++){
-            sum=sum-trips[i-k].fare+trips[i].fare;
-            double newAverage=sum/k;
-            if(newAverage>maxAverage){
-                maxAverage=newAverage;
-                start=i-k+1;
-            }
-        }
-        cout<<"Best Window starts from Ride: "<< start+1<<endl;
-        cout<<" Maximum Average revenue in period k: "<< maxAverage <<endl;
 
-        else{
-            cout<<"Invalid window size"
+    cout << "\nEnter Window Size : ";
+    cin >> k;
+
+    if(k <= 0 || k > trips.size())
+    {
+        cout << "Invalid Window Size!" << endl;
+        return;
+    }
+
+    double sum = 0;
+
+    for(int i = 0; i < k; i++)
+    {
+        if(!trips[i].cancelled)
+            sum += trips[i].fare;
+    }
+
+    double maxAverage = sum / k;
+    int start = 0;
+
+    for(int i = k; i < trips.size(); i++)
+    {
+        if(!trips[i].cancelled)
+            sum += trips[i].fare;
+
+        if(!trips[i - k].cancelled)
+            sum -= trips[i - k].fare;
+
+        double average = sum / k;
+
+        if(average > maxAverage)
+        {
+            maxAverage = average;
+            start = i - k + 1;
         }
     }
+
+    cout << "\n----- Sliding Window -----" << endl;
+    cout << "Best Window Starts From Ride : " << start + 1 << endl;
+    cout << "Maximum Average Revenue : Rs. " << maxAverage << endl;
 }
 
+
+// Kadane's Algorithm
 void maximumRevenuePeriod(RideAnalytics &analytics)
 {
-    vector<Trip> trips = analytics.getTrips();
+    vector<Trip> &trips = analytics.getTrips();
+
+    if(trips.empty())
+    {
+        cout << "No Trips Available!" << endl;
+        return;
+    }
 
     double currentRevenue = 0;
     double maxRevenue = 0;
@@ -113,20 +152,30 @@ void maximumRevenuePeriod(RideAnalytics &analytics)
     int end = 0;
     int tempStart = 0;
 
-    for(int i=0; i<trips.size();i++){
-        currentRevenue += trips[i].fare;
+    for(int i = 0; i < trips.size(); i++)
+    {
+        if(!trips[i].cancelled)
+        {
+            currentRevenue += trips[i].fare;
+        }
+
         if(currentRevenue > maxRevenue)
         {
             maxRevenue = currentRevenue;
             start = tempStart;
             end = i;
         }
+
         if(currentRevenue < 0)
         {
             currentRevenue = 0;
             tempStart = i + 1;
         }
     }
-    cout<<"Maximum Revenue: "<< maxRevenue <<endl;
-    cout<<"Maximum Revenue Period: Ride "<< start + 1 <<"to Ride "<< end + 1 <<endl;
+
+    cout << "\n----- Maximum Revenue Period -----" << endl;
+    cout << "Best Revenue Period : Ride " << start + 1
+         << " to Ride " << end + 1 << endl;
+
+    cout << "Maximum Revenue : Rs. " << maxRevenue << endl;
 }
