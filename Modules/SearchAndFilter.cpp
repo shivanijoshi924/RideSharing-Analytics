@@ -1,6 +1,7 @@
 #include "../Trip.h"
 #include "../RideAnalytics.h"
 #include <algorithm>
+#include <cctype>
 #include <vector>
 #include <iostream>
 
@@ -121,67 +122,58 @@ void removeCancelledTrips(RideAnalytics &analytics)
 void filterRidesByZone(RideAnalytics &analytics)
 {
     vector<Trip> &trips = analytics.getTrips();
-
-    string zone;
-
-    cout << "\nEnter Zone : ";
-    cin >> zone;
+    string targetZone;
+    cout << "Enter Zone: ";
+    cin >> targetZone;
 
     bool found = false;
 
-    cout << "\n----- Rides In " << zone << " -----" << endl;
+    targetZone = toLower(targetZone);
 
-    for(auto &trip : trips)
+    for (Trip t : trips)
     {
-        if(trip.zone == zone)
+        if (toLower(t.zone) == targetZone)
         {
-            cout << "Ride ID : " << trip.rideID
-                 << "  Driver ID : " << trip.driverID
-                 << "  Fare : " << trip.fare
-                 << "  Rating : " << trip.rating
-                 << endl;
-
             found = true;
+
+            cout <<"RideID : "<< t.rideID << " , "
+                 << "DriverID : " << t.driverID << " , "
+                 << "Fare : " << t.fare << " , "
+                 << "Zone : " << t.zone << " , "
+                 << "Rating : " << t.rating << endl;
         }
     }
 
-    if(!found)
-    {
-        cout << "No Rides Found!" << endl;
-    }
+    if (!found)
+        cout << "No Ride Found\n";
 }
 
 
-// Filter By Rating
 void filterRidesByRating(RideAnalytics &analytics)
 {
     vector<Trip> &trips = analytics.getTrips();
-
-    double rating;
-
-    cout << "\nEnter Minimum Rating : ";
-    cin >> rating;
+    double targetRating;
+    cout << "Enter Rating: ";
+    cin >> targetRating;
 
     bool found = false;
 
-    cout << "\n----- Filtered Rides -----" << endl;
-
-    for(auto &trip : trips)
+    for (Trip t : trips)
     {
-        if(trip.rating >= rating)
+        if (t.rating >= targetRating)
         {
-            cout << "Ride ID : " << trip.rideID
-                 << "  Driver ID : " << trip.driverID
-                 << "  Rating : " << trip.rating
-                 << "  Fare : " << trip.fare
-                 << endl;
-
             found = true;
+
+            cout <<"RideID : "<< t.rideID << " , "
+                 << "DriverID : " << t.driverID << " , "
+                 << "Fare : " << t.fare << " , "
+                 << "Zone : " << t.zone << " , "
+                 << "Rating : " << t.rating << endl;
         }
     }
 
-    if(!found)
-    {
-        cout << "No Matching Rides Found!" << endl;
-    }
+    if (!found)
+        cout << "No Ride Found\n";
 }
+
+
