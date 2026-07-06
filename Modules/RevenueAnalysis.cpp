@@ -75,6 +75,7 @@ void revenueRangeQuery(RideAnalytics &analytics)
 
     cout << "Revenue : Rs. " << revenue << endl;
 }
+    
 
 
 // Sliding Window
