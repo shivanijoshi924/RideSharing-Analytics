@@ -3,7 +3,10 @@
 #include <algorithm>
 #include <vector>
 #include <iostream>
-#include<map>
+#include <map>
+
+using namespace std;
+
 /*
 1. Difference Array
 2. Zone Analysis
@@ -72,7 +75,7 @@ void surgePricing(RideAnalytics &analytics)
 
 
 // Zone Analysis
-void zoneAnalysis(RideAnalytics &analytics)
+void zoneWiseAnalysis(RideAnalytics &analytics)
 {
     vector<Trip> &trips = analytics.getTrips();
 
@@ -113,8 +116,8 @@ void zoneAnalysis(RideAnalytics &analytics)
 }
 
 
-//  Report
-void report(RideAnalytics &analytics)
+// Generate Report
+void generateReport(RideAnalytics &analytics)
 {
     vector<Trip> &trips = analytics.getTrips();
 
@@ -167,5 +170,5 @@ void report(RideAnalytics &analytics)
     cout << "Average Rating : " << totalRating / totalRides << endl;
     cout << "Highest Fare : Rs. " << highestFare << endl;
     cout << "Lowest Fare : Rs. " << lowestFare << endl;
-   
+    cout << "========================================" << endl;
 }

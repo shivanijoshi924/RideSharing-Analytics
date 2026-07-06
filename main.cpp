@@ -1,159 +1,100 @@
 #include "RideAnalytics.h"
 
+// Forward declarations of all module functions
 extern vector<Trip> sampleTrips;
 
-
-// Functions from RevenueAnalysis.cpp
+// RevenueAnalysis.cpp
 void calculateTotalRevenue(RideAnalytics &analytics);
 void revenueRangeQuery(RideAnalytics &analytics);
 void averageRevenue(RideAnalytics &analytics);
 void maximumRevenuePeriod(RideAnalytics &analytics);
 
-// Functions from SearchAndFilter.cpp
-void searchTripsByFare(RideAnalytics &analytics);
-void findCheapestRide(RideAnalytics &analytics);
-void removeCancelledTrips(RideAnalytics &analytics);
-void filterRidesByZone(RideAnalytics &analytics);
-void filterRidesByRating(RideAnalytics &analytics);
-
-// Functions from DriverAnalytics.cpp
+// DriverAnalytics.cpp
 void driverStatistics(RideAnalytics &analytics);
 void sortDriversByRating(RideAnalytics &analytics);
 void topDrivers(RideAnalytics &analytics);
 void highestRatedDriver(RideAnalytics &analytics);
 void countHighRatedTrips(RideAnalytics &analytics);
 
-// Functions from SurgePricing.cpp
-void surgePricing(RideAnalytics &analytics);
-void zoneAnalysis(RideAnalytics &analytics);
-void report(RideAnalytics &analytics);
+// SearchAndFilter.cpp
+void searchTripsByFare(RideAnalytics &analytics);
+void findCheapestRide(RideAnalytics &analytics);
+void removeCancelledTrips(RideAnalytics &analytics);
+void filterRidesByZone(RideAnalytics &analytics);
+void filterRidesByRating(RideAnalytics &analytics);
 
+// SurgePricing.cpp
+void surgePricing(RideAnalytics &analytics);
+void zoneWiseAnalysis(RideAnalytics &analytics);
+void generateReport(RideAnalytics &analytics);
 
 int main()
 {
     RideAnalytics analytics;
 
-    for(Trip trip : sampleTrips)
-   {
-         analytics.addTrip(trip);
-   }
+    // Load sample data
+    for (auto &trip : sampleTrips)
+        analytics.addTrip(trip);
 
+    // menu
     int choice;
-
     do
     {
-        cout << "\n==========================================";
-        cout << "\n      RIDE SHARING ANALYTICS SYSTEM";
-        cout << "\n==========================================";
-
-        cout << "\n1. Display All Trips";
-        cout << "\n2. Calculate Total Revenue";
-        cout << "\n3. Revenue Range Query (Prefix Sum)";
-        cout << "\n4. Average Revenue (Sliding Window)";
-        cout << "\n5. Maximum Revenue Period (Kadane)";
-        cout << "\n6. Search Trips By Fare";
-        cout << "\n7. Find Cheapest Ride";
-        cout << "\n8. Remove Cancelled Trips";
-        cout << "\n9. Filter Trips By Zone";
-        cout << "\n10. Filter Trips By Rating";
-        cout << "\n11. Driver Statistics";
-        cout << "\n12. Sort Drivers By Rating";
-        cout << "\n13. Top Drivers";
-        cout << "\n14. Highest Rated Driver";
-        cout << "\n15. Count High Rated Trips";
-        cout << "\n16. Apply Surge Pricing";
-        cout << "\n17. Zone wise Analysis";
-        cout << "\n18. Generate Report";
-        cout << "\n0. Exit";
-
-        cout << "\n\nEnter Choice : ";
+        cout << "\n========================================" << endl;
+        cout << "     RIDE SHARING ANALYTICS SYSTEM      " << endl;
+        cout << "========================================" << endl;
+        cout << "  1. Display All Trips" << endl;
+        cout << "  --- Revenue Analysis ---" << endl;
+        cout << "  2. Total Revenue" << endl;
+        cout << "  3. Revenue Range Query (Prefix Sum)" << endl;
+        cout << "  4. Average Revenue per Window (Sliding Window)" << endl;
+        cout << "  5. Maximum Revenue Period (Kadane)" << endl;
+        cout << "  --- Driver Analytics ---" << endl;
+        cout << "  6. Driver Statistics" << endl;
+        cout << "  7. Sort Rides by Rating" << endl;
+        cout << "  8. Top K Drivers" << endl;
+        cout << "  9. Highest Rated Driver" << endl;
+        cout << "  10. Count High Rated Trips" << endl;
+        cout << "  --- Search & Filter ---" << endl;
+        cout << "  11. Search Trip by Fare (Binary Search)" << endl;
+        cout << "  12. Find Cheapest Ride" << endl;
+        cout << "  13. Remove Cancelled Trips" << endl;
+        cout << "  14. Filter Rides by Zone" << endl;
+        cout << "  15. Filter Rides by Rating" << endl;
+        cout << "  --- Surge Pricing & Reports ---" << endl;
+        cout << "  16. Surge Pricing Simulation" << endl;
+        cout << "  17. Zone-wise Analysis" << endl;
+        cout << "  18. Generate Full Report" << endl;
+        cout << "  0. Exit" << endl;
+        cout << "========================================" << endl;
+        cout << "Enter choice : ";
         cin >> choice;
 
-        cout << endl;
-
-        switch(choice)
+        switch (choice)
         {
-        case 1:
-            analytics.displayTrips();
-            break;
-
-        case 2:
-            calculateTotalRevenue(analytics);
-            break;
-
-        case 3:
-            revenueRangeQuery(analytics);
-            break;
-
-        case 4:
-            averageRevenue(analytics);
-            break;
-
-        case 5:
-            maximumRevenuePeriod(analytics);
-            break;
-
-        case 6:
-            searchTripsByFare(analytics);
-            break;
-
-        case 7:
-            findCheapestRide(analytics);
-            break;
-
-        case 8:
-            removeCancelledTrips(analytics);
-            break;
-
-        case 9:
-            filterRidesByZone(analytics);
-            break;
-
-        case 10:
-            filterRidesByRating(analytics);
-            break;
-
-        case 11:
-            driverStatistics(analytics);
-            break;
-
-        case 12:
-            sortDriversByRating(analytics);
-            break;
-
-        case 13:
-            topDrivers(analytics);
-            break;
-
-        case 14:
-            highestRatedDriver(analytics);
-            break;
-
-        case 15:
-            countHighRatedTrips(analytics);
-            break;
-
-        case 16:
-            surgePricing(analytics);
-            break;
-        
-        case 17:
-            zoneAnalysis(analytics);
-            break;
-
-        case 18:
-            report(analytics);
-            break;    
-        case 0:
-            cout << "\nThank you for using Ride Sharing Analytics!\n";
-            break;
-
-        default:
-            cout << "\nInvalid Choice!\n";
+            case 1:  analytics.displayTrips();           break;
+            case 2:  calculateTotalRevenue(analytics);   break;
+            case 3:  revenueRangeQuery(analytics);       break;
+            case 4:  averageRevenue(analytics);          break;
+            case 5:  maximumRevenuePeriod(analytics);    break;
+            case 6:  driverStatistics(analytics);        break;
+            case 7:  sortDriversByRating(analytics);     break;
+            case 8:  topDrivers(analytics);              break;
+            case 9:  highestRatedDriver(analytics);      break;
+            case 10: countHighRatedTrips(analytics);     break;
+            case 11: searchTripsByFare(analytics);       break;
+            case 12: findCheapestRide(analytics);        break;
+            case 13: removeCancelledTrips(analytics);    break;
+            case 14: filterRidesByZone(analytics);       break;
+            case 15: filterRidesByRating(analytics);     break;
+            case 16: surgePricingSimulation(analytics);  break;
+            case 17: zoneWiseAnalysis(analytics);        break;
+            case 18: generateReport(analytics);          break;
+            case 0:  cout << "Exiting... Goodbye!" << endl; break;
+            default: cout << "Invalid choice! Try again." << endl;
         }
 
-    } while(choice != 0);
+    } while (choice != 0);
 
     return 0;
-
 }
