@@ -4,95 +4,121 @@
 #include <cctype>
 #include <vector>
 #include <iostream>
+
+using namespace std;
+
 /*
 1. Binary Search
 2. min_element
 3. remove + erase
 */
- 
-string toLower(string str)
-{
-    for (char &ch : str)
-    {
-        ch = tolower(ch);
-    }
-    return str;
-}
 
+// Binary Search
 void searchTripsByFare(RideAnalytics &analytics)
 {
-     vector<Trip> &trips = analytics.getTrips();
+    vector<Trip> trips = analytics.getTrips();
 
-     sort(trips.begin(), trips.end(),
-         [](Trip a, Trip b)
-         {
-             return a.fare < b.fare;
-         });
-
-    double targetFare;
-
-    cout << "Enter Fare: ";
-    cin >> targetFare;
-
-    int low = 0;
-    int high = trips.size() - 1;
-
-    while (low <= high)
+    if(trips.empty())
     {
-        int mid = (high + low) / 2;
+        cout << "No Trips Available!" << endl;
+        return;
+    }
 
-        if (trips[mid].fare == targetFare)
+    sort(trips.begin(), trips.end(), [](Trip a, Trip b)
+    {
+        return a.fare < b.fare;
+    });
+
+    double fare;
+
+    cout << "\n----- Search Trip By Fare -----" << endl;
+    cout << "Enter Fare : ";
+    cin >> fare;
+
+    int left = 0;
+    int right = trips.size() - 1;
+    bool found = false;
+
+    while(left <= right)
+    {
+        int mid = (left + right) / 2;
+
+        if(trips[mid].fare == fare)
         {
-            cout << "Ride Found\n";
+            cout << "\nTrip Found!" << endl;
             cout << "Ride ID : " << trips[mid].rideID << endl;
             cout << "Driver ID : " << trips[mid].driverID << endl;
             cout << "Fare : " << trips[mid].fare << endl;
-            cout << "Zone : " << trips[mid].zone << endl;
             cout << "Rating : " << trips[mid].rating << endl;
-            return;
+            cout << "Zone : " << trips[mid].zone << endl;
+
+            found = true;
+            break;
         }
-
-        else if (trips[mid].fare < targetFare)
-            low = mid + 1;
-
+        else if(trips[mid].fare < fare)
+        {
+            left = mid + 1;
+        }
         else
-            high = mid - 1;
+        {
+            right = mid - 1;
+        }
     }
 
-    cout << "Ride Not Found\n";
+    if(!found)
+    {
+        cout << "Trip Not Found!" << endl;
+    }
 }
 
+
+// min_element
 void findCheapestRide(RideAnalytics &analytics)
 {
     vector<Trip> &trips = analytics.getTrips();
 
-    auto cheapest = min_element(trips.begin(), trips.end(),
-                                [](Trip a, Trip b)
-                                {
-                                    return a.fare < b.fare;
-                                });
-
-    if (cheapest != trips.end())
+    if(trips.empty())
     {
-        cout << "Cheapest Ride\n";
-        cout << "Ride ID : " << cheapest->rideID << endl;
-        cout << "Fare : " << cheapest->fare << endl;
-        cout << "Zone : " << cheapest->zone << endl;
+        cout << "No Trips Available!" << endl;
+        return;
     }
+
+    auto cheapest = min_element(trips.begin(), trips.end(), [](Trip a, Trip b)
+    {
+        return a.fare < b.fare;
+    });
+
+    cout << "\n----- Cheapest Ride -----" << endl;
+    cout << "Ride ID : " << cheapest->rideID << endl;
+    cout << "Driver ID : " << cheapest->driverID << endl;
+    cout << "Fare : " << cheapest->fare << endl;
+    cout << "Rating : " << cheapest->rating << endl;
+    cout << "Zone : " << cheapest->zone << endl;
+    cout << "Distance : " << cheapest->distance << endl;
 }
 
+
+// remove + erase
 void removeCancelledTrips(RideAnalytics &analytics)
 {
     vector<Trip> &trips = analytics.getTrips();
 
-    trips.erase(remove_if(trips.begin(), trips.end(),
-                          [](Trip trip)
-                          {
-                              return trip.cancelled;
-                          }),
-                trips.end());
+    int before = trips.size();
+
+    trips.erase(remove_if(trips.begin(), trips.end(), [](Trip trip)
+    {
+        return trip.cancelled;
+    }), trips.end());
+
+    int after = trips.size();
+
+    cout << "\n----- Remove Cancelled Trips -----" << endl;
+    cout << "Trips Removed : " << before - after << endl;
+    cout << "Remaining Trips : " << after << endl;
 }
 
+
+// Filter By Zone
 void filterRidesByZone(RideAnalytics &analytics)
 {
     vector<Trip> &trips = analytics.getTrips();
